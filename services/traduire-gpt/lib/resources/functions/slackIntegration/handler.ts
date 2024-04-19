@@ -64,10 +64,7 @@ export const handler: APIGatewayProxyHandler = async (
     );
   });
 
-  app.message(async ({ message, event }) => {
-    console.log(`Received message: ${JSON.stringify(message)}`);
-    console.log(`Received event: ${JSON.stringify(event)}`);
-
+  app.message(async ({ message }) => {
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
