@@ -1,3 +1,4 @@
+export { buildParameterArnSsm } from "./build-parameter-arn-ssm";
 export { buildResourceName } from "./build-resource-name";
 export { getCdkHandlerPath } from "./get-cdk-handler-path";
 export { getRegion } from "./get-region";
