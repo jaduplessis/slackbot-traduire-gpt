@@ -12,7 +12,6 @@ export interface BlockIdsMap {
 }
 
 export const getBlockId = (body: SlackInteractionPayload): BlockIdsMap => {
-  console.log(`event body: ${JSON.stringify(body)}`);
   const blocks = body.view.blocks;
 
   const blockIdsMap: BlockIdsMap = {};
@@ -43,14 +42,10 @@ export const getStateValues = (
   body: SlackInteractionPayload,
   actionId: string
 ): string => {
-  console.log(`Body: ${JSON.stringify(body)}`);
   const blockIdsMap = getBlockId(body);
-  console.log("blockIdsMap", blockIdsMap);
 
   const blockId = blockIdsMap[actionId]?.block_id ?? "";
-  console.log("blockId", blockId);
   const elementType = blockIdsMap[actionId]?.element_type ?? "";
-  console.log("elementType", elementType);
 
   const blockStateValues = body.view.state.values[blockId];
   if (blockStateValues === undefined) {

@@ -10,8 +10,6 @@ export const getApiKey = async (
     WithDecryption: true,
   };
 
-  console.log(`Getting parameter: ${JSON.stringify(input)}`);
-
   const command = new GetParameterCommand(input);
   try {
     const response = await ssm.send(command);
@@ -20,7 +18,6 @@ export const getApiKey = async (
 
     return value;
   } catch (e) {
-    console.log(`Error getting parameter: ${e}`)
     return undefined;
   }
 };
