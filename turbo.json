@@ -1,0 +1,63 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env.*local",
+    ".prettierrc",
+    "tsconfig.eslint.json",
+    "packages/shared/eslint-config/**/*",
+    "packages/shared/tsconfig/**/*"
+  ],
+  "pipeline": {
+    "build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build", "codegen"]
+    },
+    "codegen": {
+      "outputs": ["codegen/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint-fix": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build", "codegen"]
+    },
+    "test-inte": {
+      "dependsOn": ["^build", "codegen"]
+    },
+    "test-type": {
+      "dependsOn": ["^build", "codegen"]
+    },
+    "format": {},
+    "bootstrap": {
+      "dependsOn": ["^build"]
+    },
+    "deploy": {
+      "cache": false,
+      "dependsOn": ["^build"]
+    },
+    "destroy": {
+      "cache": false,
+      "dependsOn": ["^build"]
+    },
+    "ci:bootstrap": {
+      "dependsOn": ["^build"]
+    },
+    "ci:deploy": {
+      "cache": false,
+      "dependsOn": ["^build"]
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

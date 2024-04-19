@@ -1,0 +1,32 @@
+{
+  "version": "36.0.0",
+  "files": {
+    "b1283c0e94af9c2c8461ccdb7b134634c1d09bab4ea2a3632f2ae5dec10375a6": {
+      "source": {
+        "path": "asset.b1283c0e94af9c2c8461ccdb7b134634c1d09bab4ea2a3632f2ae5dec10375a6",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "b1283c0e94af9c2c8461ccdb7b134634c1d09bab4ea2a3632f2ae5dec10375a6.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "097eeb7d2bab436f2c89a97e10dc72652aa776ac91bda1bea14e73eadadddb62": {
+      "source": {
+        "path": "dev-traduire-gpt.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "097eeb7d2bab436f2c89a97e10dc72652aa776ac91bda1bea14e73eadadddb62.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
