@@ -16,10 +16,7 @@ export const handler = async (
 ) => {
   const { token, user_id, body } = event.detail;
 
-  console.log(body);
-
   const apiKey = getStateValues(body, "api_key_input");
-  console.log(apiKey);
 
   const { app, awsLambdaReceiver } = instantiateApp();
 
