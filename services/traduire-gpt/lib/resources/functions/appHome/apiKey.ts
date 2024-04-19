@@ -52,7 +52,7 @@ export const getApiKeyBlocks = (
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "*API Key* \nAPI Key: **********",
+            text: "*API Key* \nAPI Key: *****************************",
           },
         },
         {

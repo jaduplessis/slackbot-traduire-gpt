@@ -35,7 +35,6 @@ export class RemoveApiKey extends Construct {
       buildResourceName("remove-api-key"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
-        timeout: Duration.minutes(5),
         environment: {
           SLACK_SIGNING_SECRET,
           SLACK_BOT_TOKEN,

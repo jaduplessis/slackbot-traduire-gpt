@@ -9,19 +9,25 @@ import {
   getRegion,
 } from "@slackbot/helpers";
 import { Duration, Stack } from "aws-cdk-lib";
+import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
-interface submitApiKeyProps {
+interface translateMessageProps {
+  table: Table;
   eventBus: EventBus;
 }
 
-export class SubmitApiKey extends Construct {
+export class TranslateMessage extends Construct {
   public function: NodejsFunction;
 
-  constructor(scope: Construct, id: string, { eventBus }: submitApiKeyProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { table, eventBus }: translateMessageProps
+  ) {
     super(scope, id);
 
     const region = getRegion();
@@ -32,31 +38,32 @@ export class SubmitApiKey extends Construct {
 
     this.function = new SlackCustomResource(
       this,
-      buildResourceName("submit-api-key"),
+      buildResourceName("translate-message"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
+        timeout: Duration.minutes(3),
         environment: {
           SLACK_SIGNING_SECRET,
           SLACK_BOT_TOKEN,
-          EVENT_BUS: eventBus.eventBusName,
+          TABLE_NAME: table.tableName,
         },
       }
     );
 
-    eventBus.grantPutEventsTo(this.function);
+    table.grantReadWriteData(this.function);
 
-    new Rule(this, buildResourceName("on-submit-api-key-event"), {
+    new Rule(this, buildResourceName("on-message-translated-event"), {
       eventBus,
       eventPattern: {
         source: ["application.slackIntegration"],
-        detailType: ["submit.api.key"],
+        detailType: ["translate.message"],
       },
       targets: [new LambdaFunction(this.function)],
     });
 
     const accessPattern = buildResourceName("api-keys/*");
     const ssmReadPolicy = new PolicyStatement({
-      actions: ["ssm:PutParameter"],
+      actions: ["ssm:GetParameter"],
       resources: [buildParameterArnSsm(`${accessPattern}`, region, accountId)],
     });
 

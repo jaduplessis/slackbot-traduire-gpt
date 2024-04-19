@@ -7,7 +7,13 @@ import {
   EventBridge,
 } from "@slackbot/cdk-constructs";
 import { buildResourceName, getStage } from "@slackbot/helpers";
-import { AppHome, RemoveApiKey, SlackIntegration, SubmitApiKey } from "./resources/functions";
+import {
+  AppHome,
+  RemoveApiKey,
+  SlackIntegration,
+  SubmitApiKey,
+  TranslateMessage,
+} from "./resources/functions";
 
 export class TranslateStack extends Stack {
   constructor(scope: Construct, id: string) {
@@ -27,7 +33,6 @@ export class TranslateStack extends Stack {
       this,
       "translate-slack-integration",
       {
-        table: translateTable.table,
         eventBus: eventBridge.eventBus,
       }
     );
@@ -46,6 +51,11 @@ export class TranslateStack extends Stack {
     });
 
     new RemoveApiKey(this, "remove-api-key", {
+      eventBus: eventBridge.eventBus,
+    });
+
+    new TranslateMessage(this, "translate-message", {
+      table: translateTable.table,
       eventBus: eventBridge.eventBus,
     });
   }
