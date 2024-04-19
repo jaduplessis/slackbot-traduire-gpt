@@ -25,7 +25,6 @@ export class SlackIntegration extends Construct {
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
     const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
-    const OPENAI_API_KEY = getEnvVariable("OPENAI_API_KEY");
 
     this.function = new SlackCustomResource(
       this,
