@@ -35,7 +35,6 @@ export class AppHome extends Construct {
       buildResourceName("app-home-opened"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
-        timeout: Duration.minutes(5),
         environment: {
           SLACK_SIGNING_SECRET,
           SLACK_BOT_TOKEN,
