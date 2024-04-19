@@ -1,0 +1,163 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "dev-traduire-gpt.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "dev-traduire-gpt.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "dev-traduire-gpt": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "dev-traduire-gpt.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/097eeb7d2bab436f2c89a97e10dc72652aa776ac91bda1bea14e73eadadddb62.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "dev-traduire-gpt.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "dev-traduire-gpt.assets"
+      ],
+      "metadata": {
+        "/dev-traduire-gpt/translateTable/translateTable-ddb-traduire-gpt-dev-translations-table": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "translateTabletranslateTableddbtraduiregptdevtranslationstable77FDC52D"
+            }
+          }
+        ],
+        "/dev-traduire-gpt/translateTable/translateTable-ddb-traduire-gpt-dev-translations-table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "translateTabletranslateTableddbtraduiregptdevtranslationstable77FDC52D"
+          }
+        ],
+        "/dev-traduire-gpt/translate-slack-integration/traduire-gpt-dev-slackIntegration-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "translateslackintegrationtraduiregptdevslackIntegrationlambdaServiceRoleC60B66AC"
+          }
+        ],
+        "/dev-traduire-gpt/translate-slack-integration/traduire-gpt-dev-slackIntegration-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "translateslackintegrationtraduiregptdevslackIntegrationlambdaServiceRoleDefaultPolicy884D9622"
+          }
+        ],
+        "/dev-traduire-gpt/translate-slack-integration/traduire-gpt-dev-slackIntegration-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "translateslackintegrationtraduiregptdevslackIntegrationlambdaAE792318"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayC5416F00"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayDeployment1740854953a07d9bf835b90be90bede8930be90b"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/DeploymentStage.dev/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayDeploymentStagedev1105A1C0"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayEndpointCA362DA3"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayOPTIONSA39488E2"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/slack/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayslack8360DB76"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/slack/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayslackOPTIONSE0E699FB"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/slack/POST/ApiPermission.devtraduiregptapigateway67346520.POST..slack": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayslackPOSTApiPermissiondevtraduiregptapigateway67346520POSTslack65509A7C"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/slack/POST/ApiPermission.Test.devtraduiregptapigateway67346520.POST..slack": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayslackPOSTApiPermissionTestdevtraduiregptapigateway67346520POSTslackC3AE02DD"
+          }
+        ],
+        "/dev-traduire-gpt/api-gateway/api-gateway/Default/slack/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigatewayslackPOSTADA8C1D1"
+          }
+        ],
+        "/dev-traduire-gpt/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/dev-traduire-gpt/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/dev-traduire-gpt/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/dev-traduire-gpt/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "dev-traduire-gpt"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
