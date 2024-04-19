@@ -4,6 +4,7 @@
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.540.0",
     "@aws-sdk/client-dynamodb": "^3.540.0",
+    "@aws-sdk/client-eventbridge": "^3.429.0",
     "@aws-sdk/lib-dynamodb": "^3.540.0",
     "@slackbot/helpers": "workspace:^",
     "dynamodb-toolbox": "^0.9.2",

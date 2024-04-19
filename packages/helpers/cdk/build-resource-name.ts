@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { getStackName } from "./get-stack-name";
 import { getStage } from "./get-stage";
 

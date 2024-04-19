@@ -1,11 +1,10 @@
-import { App, AwsLambdaReceiver } from "@slack/bolt";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import { translate } from "traduire-gpt";
 
+import { EventBridgeAdapter } from "@slackbot/cdk-constructs";
 import { getEnvVariable } from "@slackbot/helpers";
-
 import { TranslateEntity } from "../../dataModel/Translate";
-import { createHome } from "./appHome";
+import { BaseEvent, instantiateApp } from "../../utils";
 
 interface MessageEvent {
   text: string;
@@ -15,42 +14,58 @@ interface MessageEvent {
   thread_ts?: string;
 }
 
+const eventBridge = new EventBridgeAdapter();
+
 export const handler: APIGatewayProxyHandler = async (
   event,
   context,
   callback
 ) => {
-  const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
-  const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
-
-  const awsLambdaReceiver = new AwsLambdaReceiver({
-    signingSecret: SLACK_SIGNING_SECRET,
-  });
-
-  const app = new App({
-    token: SLACK_BOT_TOKEN,
-    receiver: awsLambdaReceiver,
-  });
+  const { app, awsLambdaReceiver } = instantiateApp();
 
   app.event(
     "app_home_opened",
     async ({ event: home_event, context: home_context }) => {
-      console.log("app_home_opened", home_event);
+      const token = home_context.botToken ?? "";
+      const user_id = home_event.user;
+      const eventData: BaseEvent = { token, user_id };
 
-      // Display App Home
-      const homeView = createHome();
-
-      try {
-        await app.client.views.publish({
-          token: home_context.botToken,
-          user_id: home_event.user,
-          view: homeView,
-        });
-      } catch (e) {
-        console.error(e);
-      }
+      await eventBridge.putEvent(
+        "application.slackIntegration",
+        {
+          ...eventData,
+        },
+        "app.home.opened"
+      );
     }
   );
+
+  app.action("submit_api_key", async ({ ack, body, context }) => {
+    await ack();
+
+    eventBridge.putEvent(
+      "application.slackIntegration",
+      {
+        token: context.botToken,
+        user_id: body.user.id,
+        body,
+      },
+      "submit.api.key"
+    );
+  });
+
+  app.action("remove_api_key", async ({ ack, body, context }) => {
+    await ack();
+
+    eventBridge.putEvent(
+      "application.slackIntegration",
+      {
+        token: context.botToken,
+        user_id: body.user.id,
+      },
+      "remove.api.key"
+    );
+  });
 
   app.message(async ({ message }) => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -98,7 +113,7 @@ export const handler: APIGatewayProxyHandler = async (
     console.log(`Translation: ${translation}`);
 
     await app.client.chat.postMessage({
-      token: SLACK_BOT_TOKEN,
+      token: getEnvVariable("SLACK_BOT_TOKEN"),
       channel,
       thread_ts: ts,
       blocks: [
