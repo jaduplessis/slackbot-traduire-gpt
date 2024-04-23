@@ -1,9 +1,3 @@
-export enum BlockTypeEnum {
-  INPUT = "input",
-  ACTIONS = "actions",
-  DIVIDER = "divider",
-}
-
 export enum ElementTypeEnum {
   PLAIN_TEXT_INPUT = "plain_text_input",
   STATIC_SELECT = "static_select",
@@ -18,7 +12,6 @@ interface Element {
 export interface SlackInteractionPayload {
   view: {
     blocks: Array<{
-      type: BlockTypeEnum;
       block_id: string;
       elements: Element[];
       element: Element;
@@ -38,7 +31,7 @@ export interface SlackInteractionPayload {
                 emoji: boolean;
               };
               value: string;
-            };
+            } | null;
           };
         };
       };

@@ -17,7 +17,7 @@ export const getLanguagePreferenceBlocks = (
     },
     {
       type: "input",
-      block_id: "primary_language_input",
+      block_id: "primary_language_input_block",
       element: {
         type: "static_select",
         action_id: "primary_language_input",
@@ -42,7 +42,7 @@ export const getLanguagePreferenceBlocks = (
     },
     {
       type: "input",
-      block_id: "secondary_language_input",
+      block_id: "secondary_language_input_block",
       element: {
         type: "static_select",
         action_id: "secondary_language_input",
@@ -62,7 +62,7 @@ export const getLanguagePreferenceBlocks = (
       },
       label: {
         type: "plain_text",
-        text: `Secondary Language: ${primaryLanguage || "French"}`,
+        text: `Secondary Language: ${secondaryLanguage || "French"}`,
       },
     },
     {
