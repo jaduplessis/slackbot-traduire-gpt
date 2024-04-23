@@ -17,11 +17,7 @@ export const handler = async (
 ) => {
   const { token, user_id, body } = event.detail;
 
-  const primaryLanguage = getStateValues(
-    body,
-    "primary_language_input_block",
-    "primary_language_input"
-  );
+  const primaryLanguage = getStateValues(body, "primary_language_input");
   if (primaryLanguage) {
     await uploadParameter(
       ssm,
@@ -31,11 +27,7 @@ export const handler = async (
     );
   }
 
-  const secondaryLanguage = getStateValues(
-    body,
-    "secondary_language_input_block",
-    "secondary_language_input"
-  );
+  const secondaryLanguage = getStateValues(body, "secondary_language_input");
   if (secondaryLanguage) {
     console.log("secondaryLanguage", secondaryLanguage);
     await uploadParameter(
