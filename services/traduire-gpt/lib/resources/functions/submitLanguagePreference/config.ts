@@ -8,25 +8,23 @@ import {
   getEnvVariable,
   getRegion,
 } from "@slackbot/helpers";
-import { Duration, Stack } from "aws-cdk-lib";
-import { Table } from "aws-cdk-lib/aws-dynamodb";
+import { Stack } from "aws-cdk-lib";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
-interface translateMessageProps {
-  table: Table;
+interface SubmitLanguagePreferenceProps {
   eventBus: EventBus;
 }
 
-export class TranslateMessage extends Construct {
+export class SubmitLanguagePreference extends Construct {
   public function: NodejsFunction;
 
   constructor(
     scope: Construct,
     id: string,
-    { table, eventBus }: translateMessageProps
+    { eventBus }: SubmitLanguagePreferenceProps
   ) {
     super(scope, id);
 
@@ -38,38 +36,32 @@ export class TranslateMessage extends Construct {
 
     this.function = new SlackCustomResource(
       this,
-      buildResourceName("translate-message"),
+      buildResourceName("submit-language-preference"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
-        timeout: Duration.minutes(3),
         environment: {
           SLACK_SIGNING_SECRET,
           SLACK_BOT_TOKEN,
-          TABLE_NAME: table.tableName,
+          EVENT_BUS: eventBus.eventBusName,
         },
       }
     );
 
-    table.grantReadWriteData(this.function);
+    eventBus.grantPutEventsTo(this.function);
 
-    new Rule(this, buildResourceName("on-message-translated-event"), {
+    new Rule(this, buildResourceName("on-submit-language-preference-event"), {
       eventBus,
       eventPattern: {
         source: ["application.slackIntegration"],
-        detailType: ["translate.message"],
+        detailType: ["submit.language.preference"],
       },
       targets: [new LambdaFunction(this.function)],
     });
 
-    const apiAccessPattern = buildResourceName("api-keys/*");
-    const languageAccessPattern = buildResourceName("language-preferences/*");
-
+    const accessPattern = buildResourceName("language-preference/*");
     const ssmReadPolicy = new PolicyStatement({
-      actions: ["ssm:GetParameter"],
-      resources: [
-        buildParameterArnSsm(`${apiAccessPattern}`, region, accountId),
-        buildParameterArnSsm(`${languageAccessPattern}`, region, accountId),
-      ],
+      actions: ["ssm:PutParameter"],
+      resources: [buildParameterArnSsm(`${accessPattern}`, region, accountId)],
     });
 
     this.function.addToRolePolicy(ssmReadPolicy);

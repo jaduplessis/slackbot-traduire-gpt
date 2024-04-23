@@ -8,7 +8,7 @@ import {
   getEnvVariable,
   getRegion,
 } from "@slackbot/helpers";
-import { Duration, Stack } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -51,12 +51,21 @@ export class AppHome extends Construct {
       targets: [new LambdaFunction(this.function)],
     });
 
-    const accessPattern = buildResourceName("api-keys/*");
+    const accessPatternApiKey = buildResourceName("api-keys/*");
+    const accessPatternLanguagePreference = buildResourceName(
+      "language-preference/*"
+    );
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
-      resources: [buildParameterArnSsm(`${accessPattern}`, region, accountId)],
+      resources: [
+        buildParameterArnSsm(`${accessPatternApiKey}`, region, accountId),
+        buildParameterArnSsm(
+          `${accessPatternLanguagePreference}`,
+          region,
+          accountId
+        ),
+      ],
     });
-
     this.function.addToRolePolicy(ssmReadPolicy);
   }
 }

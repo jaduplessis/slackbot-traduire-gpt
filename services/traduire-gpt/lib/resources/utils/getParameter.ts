@@ -1,13 +1,14 @@
 import { GetParameterCommand, SSMClient } from "@aws-sdk/client-ssm";
 import { buildResourceName } from "@slackbot/helpers";
 
-export const getApiKey = async (
+export const getParameter = async (
   ssm: SSMClient,
-  parameter: string
+  parameter: string,
+  encrypted: boolean
 ): Promise<string | undefined> => {
   const input = {
-    Name: `/${buildResourceName("api-keys/" + parameter)}`,
-    WithDecryption: true,
+    Name: `/${buildResourceName(parameter)}`,
+    WithDecryption: encrypted,
   };
 
   const command = new GetParameterCommand(input);

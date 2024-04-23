@@ -1,7 +1,7 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
 import { getEnvVariable, getRegion } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
-import { BaseEvent, getApiKey, instantiateApp } from "../../utils";
+import { BaseEvent, getParameter, instantiateApp } from "../../utils";
 import { createHome } from "./appHome";
 
 const ssm = new SSMClient({ region: getRegion() });
@@ -13,9 +13,19 @@ export const handler = async (
 
   const { app, awsLambdaReceiver } = instantiateApp();
 
-  const apiKey = await getApiKey(ssm, "OPENAI_API_KEY");
+  const apiKey = await getParameter(ssm, "api-keys/OPENAI_API_KEY", true);
+  const primaryLanguage = await getParameter(
+    ssm,
+    "language-preference/PRIMARY_LANGUAGE",
+    false
+  );
+  const secondaryLanguage = await getParameter(
+    ssm,
+    "language-preference/SECONDARY_LANGUAGE",
+    false
+  );
 
-  const homeView = createHome(apiKey);
+  const homeView = createHome(apiKey, primaryLanguage, secondaryLanguage);
 
   try {
     await app.client.views.publish({
