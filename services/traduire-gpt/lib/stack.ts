@@ -12,6 +12,7 @@ import {
   RemoveApiKey,
   SlackIntegration,
   SubmitApiKey,
+  SubmitLanguagePreference,
   TranslateMessage,
 } from "./resources/functions";
 
@@ -51,6 +52,10 @@ export class TranslateStack extends Stack {
     });
 
     new RemoveApiKey(this, "remove-api-key", {
+      eventBus: eventBridge.eventBus,
+    });
+
+    new SubmitLanguagePreference(this, "submit-language-preference", {
       eventBus: eventBridge.eventBus,
     });
 

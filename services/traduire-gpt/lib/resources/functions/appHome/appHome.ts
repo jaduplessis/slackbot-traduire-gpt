@@ -30,7 +30,7 @@ export const createHome = (
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*How to use* \n1. Add this app to your channel. \n2. Type `/traduire <text>` in the channel to get translations of the text.",
+        text: "*How to use* \n1. Add this app to your channel. \n2. Type `/traduire <text>` in the channel to get translations of the text.\n\n",
       },
     },
     {

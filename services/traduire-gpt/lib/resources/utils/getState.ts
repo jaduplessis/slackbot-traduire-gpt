@@ -1,62 +1,23 @@
-import {
-  BlockTypeEnum,
-  ElementTypeEnum,
-  SlackInteractionPayload,
-} from "./slackTypes";
-
-export interface BlockIdsMap {
-  [key: string]: {
-    block_id: string;
-    element_type: ElementTypeEnum;
-  };
-}
-
-export const getBlockId = (body: SlackInteractionPayload): BlockIdsMap => {
-  const blocks = body.view.blocks;
-
-  const blockIdsMap: BlockIdsMap = {};
-  blocks.map((block) => {
-    if (block.type === BlockTypeEnum.ACTIONS) {
-      const elements = block.elements;
-
-      elements.map((element) => {
-        blockIdsMap[element.action_id] = {
-          block_id: block.block_id,
-          element_type: element.type,
-        };
-      });
-    } else if (block.type === BlockTypeEnum.INPUT) {
-      blockIdsMap[block.element.action_id] = {
-        block_id: block.block_id,
-        element_type: block.element.type,
-      };
-    } else {
-      // Do nothing
-    }
-  });
-
-  return blockIdsMap;
-};
+import { ElementTypeEnum, SlackInteractionPayload } from "./slackTypes";
 
 export const getStateValues = (
   body: SlackInteractionPayload,
   actionId: string
-): string => {
-  const blockIdsMap = getBlockId(body);
+): string | undefined => {
+  const stateValues = body.view.state.values;
 
-  const blockId = blockIdsMap[actionId]?.block_id ?? "";
-  const elementType = blockIdsMap[actionId]?.element_type ?? "";
+  const blockState = stateValues[`${actionId}_block`];
 
-  const blockStateValues = body.view.state.values[blockId];
-  if (blockStateValues === undefined) {
-    throw new Error("Block state values is undefined");
-  }
+  const state = blockState[actionId];
 
-  if (elementType === ElementTypeEnum.STATIC_SELECT) {
-    return blockStateValues[actionId]?.selected_option.value ?? "";
-  } else if (elementType === ElementTypeEnum.PLAIN_TEXT_INPUT) {
-    return blockStateValues[actionId]?.value ?? "";
-  } else {
-    throw new Error("Unknown element type");
+  const { type } = state;
+
+  switch (type) {
+    case ElementTypeEnum.STATIC_SELECT:
+      return state.selected_option?.value ?? undefined;
+    case ElementTypeEnum.PLAIN_TEXT_INPUT:
+      return state.value;
+    default:
+      throw new Error("Invalid element type");
   }
 };

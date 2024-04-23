@@ -14,14 +14,18 @@ import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
-interface submitApiKeyProps {
+interface SubmitLanguagePreferenceProps {
   eventBus: EventBus;
 }
 
-export class SubmitApiKey extends Construct {
+export class SubmitLanguagePreference extends Construct {
   public function: NodejsFunction;
 
-  constructor(scope: Construct, id: string, { eventBus }: submitApiKeyProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { eventBus }: SubmitLanguagePreferenceProps
+  ) {
     super(scope, id);
 
     const region = getRegion();
@@ -32,7 +36,7 @@ export class SubmitApiKey extends Construct {
 
     this.function = new SlackCustomResource(
       this,
-      buildResourceName("submit-api-key"),
+      buildResourceName("submit-language-preference"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
         environment: {
@@ -45,16 +49,16 @@ export class SubmitApiKey extends Construct {
 
     eventBus.grantPutEventsTo(this.function);
 
-    new Rule(this, buildResourceName("on-submit-api-key-event"), {
+    new Rule(this, buildResourceName("on-submit-language-preference-event"), {
       eventBus,
       eventPattern: {
         source: ["application.slackIntegration"],
-        detailType: ["submit.api.key"],
+        detailType: ["submit.language.preference"],
       },
       targets: [new LambdaFunction(this.function)],
     });
 
-    const accessPattern = buildResourceName("api-keys/*");
+    const accessPattern = buildResourceName("language-preference/*");
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:PutParameter"],
       resources: [buildParameterArnSsm(`${accessPattern}`, region, accountId)],
