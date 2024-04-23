@@ -29,7 +29,6 @@ export const handler = async (
 
   const secondaryLanguage = getStateValues(body, "secondary_language_input");
   if (secondaryLanguage) {
-    console.log("secondaryLanguage", secondaryLanguage);
     await uploadParameter(
       ssm,
       "language-preference/SECONDARY_LANGUAGE",
