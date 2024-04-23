@@ -1,9 +1,15 @@
 import { HomeView } from "@slack/bolt";
 import { getApiKeyBlocks } from "./apiKey";
+import { getLanguagePreferenceBlocks } from "./languagePreference";
 
-export const createHome = (apiKey: string | undefined): HomeView => {
+export const createHome = (
+  apiKey: string | undefined,
+  primaryLanguage: string | undefined,
+  secondaryLanguage: string | undefined
+): HomeView => {
   // Block to request the user to input the API key if undefined
   const apiKeyBlock = getApiKeyBlocks(apiKey);
+  const languagePreferenceBlocks = getLanguagePreferenceBlocks(primaryLanguage, secondaryLanguage);
 
   const blocks = [
     {
@@ -27,6 +33,10 @@ export const createHome = (apiKey: string | undefined): HomeView => {
         text: "*How to use* \n1. Add this app to your channel. \n2. Type `/traduire <text>` in the channel to get translations of the text.",
       },
     },
+    {
+      type: "divider",
+    },
+    ...languagePreferenceBlocks,
   ];
 
   const view: HomeView = {
