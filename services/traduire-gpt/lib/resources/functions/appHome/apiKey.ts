@@ -16,7 +16,7 @@ export const getApiKeyBlocks = (
         },
         {
           type: "input",
-          block_id: "api_key_input",
+          block_id: "api_key_input_block",
           element: {
             type: "plain_text_input",
             action_id: "api_key_input",
@@ -57,6 +57,7 @@ export const getApiKeyBlocks = (
         },
         {
           type: "actions",
+          block_id: "remove_api_key",
           elements: [
             {
               type: "button",
