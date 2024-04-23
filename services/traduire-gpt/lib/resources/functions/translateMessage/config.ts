@@ -61,10 +61,15 @@ export class TranslateMessage extends Construct {
       targets: [new LambdaFunction(this.function)],
     });
 
-    const accessPattern = buildResourceName("api-keys/*");
+    const apiAccessPattern = buildResourceName("api-keys/*");
+    const languageAccessPattern = buildResourceName("language-preferences/*");
+
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
-      resources: [buildParameterArnSsm(`${accessPattern}`, region, accountId)],
+      resources: [
+        buildParameterArnSsm(`${apiAccessPattern}`, region, accountId),
+        buildParameterArnSsm(`${languageAccessPattern}`, region, accountId),
+      ],
     });
 
     this.function.addToRolePolicy(ssmReadPolicy);

@@ -3,7 +3,8 @@ import { getEnvVariable, getRegion } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
 import { translate } from "traduire-gpt";
 import { TranslateEntity } from "../../dataModel/Translate";
-import { getParameter, instantiateApp, MessageEvent } from "../../utils";
+import { instantiateApp, MessageEvent } from "../../utils";
+import { loadSsmValues } from "./ssm";
 
 const ssm = new SSMClient({ region: getRegion() });
 
@@ -14,8 +15,7 @@ export const handler = async (
 
   const { app, awsLambdaReceiver } = instantiateApp();
 
-  const apiKey = await getParameter(ssm, "api-keys/OPENAI_API_KEY", true);
-  process.env.OPENAI_API_KEY = apiKey;
+  const { primaryLanguage, secondaryLanguage } = await loadSsmValues(ssm);
 
   if (message === undefined || message.text === undefined) {
     return;
@@ -40,7 +40,7 @@ export const handler = async (
     });
   }
 
-  const translation = await translate(text);
+  const translation = await translate(text, primaryLanguage, secondaryLanguage);
 
   if (translation === undefined) {
     return;
