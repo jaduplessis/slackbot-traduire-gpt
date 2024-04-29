@@ -3,14 +3,6 @@ import { APIGatewayProxyHandler } from "aws-lambda";
 import { EventBridgeAdapter } from "@slackbot/cdk-constructs";
 import { BaseEvent, instantiateApp } from "../../utils";
 
-interface MessageEvent {
-  text: string;
-  channel: string;
-  user: string;
-  ts: string;
-  thread_ts?: string;
-}
-
 const eventBridge = new EventBridgeAdapter();
 
 export const handler: APIGatewayProxyHandler = async (
