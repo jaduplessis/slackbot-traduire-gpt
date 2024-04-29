@@ -1,5 +1,5 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
-import { getEnvVariable, getRegion } from "@slackbot/helpers";
+import { getRegion } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
 import { BaseEvent, getParameter, instantiateApp } from "../../utils";
 import { createHome } from "./appHome";

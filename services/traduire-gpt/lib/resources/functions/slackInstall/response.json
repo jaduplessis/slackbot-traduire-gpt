@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "app_id": "A070X4USZFS",
+  "authed_user": { "id": "U060FF4UT99" },
+  "scope": "channels:history,groups:history,chat:write",
+  "token_type": "bot",
+  "access_token": "xoxb-6038606150656-7041282921316-dTV8pTLK2Y4bUWbUN1Cv4zQ4",
+  "bot_user_id": "U07178AT39A",
+  "team": { "id": "T0614HU4EKA", "name": "Pairiops" },
+  "enterprise": null,
+  "is_enterprise_install": false,
+  "warning": "superfluous_charset",
+  "response_metadata": { "warnings": ["superfluous_charset"] }
+}

@@ -10,6 +10,8 @@ import { buildResourceName, getStage } from "@slackbot/helpers";
 import {
   AppHome,
   RemoveApiKey,
+  SlackAuthCallback,
+  SlackInstall,
   SlackIntegration,
   SubmitApiKey,
   SubmitLanguagePreference,
@@ -38,9 +40,17 @@ export class TranslateStack extends Stack {
       }
     );
 
+    const slackInstall = new SlackInstall(this, "slack-install");
+    const slackAuthCallback = new SlackAuthCallback(
+      this,
+      "slack-auth-callback"
+    );
+
     new ApiGateway(this, "api-gateway", {
       stage,
       slackIntegration,
+      slackInstall,
+      slackAuthCallback,
     });
 
     new AppHome(this, "app-home", {
