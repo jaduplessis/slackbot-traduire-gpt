@@ -6,11 +6,13 @@ import {
   getCdkHandlerPath,
   getEnvVariable,
 } from "@slackbot/helpers";
+import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { EventBus } from "aws-cdk-lib/aws-events";
 import { Construct } from "constructs";
 
 interface slackIntegrationProps {
   eventBus: EventBus;
+  workspaceTable: Table;
 }
 
 export class SlackIntegration extends Construct {
@@ -19,12 +21,11 @@ export class SlackIntegration extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { eventBus }: slackIntegrationProps
+    { eventBus, workspaceTable }: slackIntegrationProps
   ) {
     super(scope, id);
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
-    const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
 
     this.function = new SlackCustomResource(
       this,
@@ -33,12 +34,12 @@ export class SlackIntegration extends Construct {
         lambdaEntry: getCdkHandlerPath(__dirname),
         environment: {
           SLACK_SIGNING_SECRET,
-          SLACK_BOT_TOKEN,
           EVENT_BUS: eventBus.eventBusName,
         },
       }
     );
 
     eventBus.grantPutEventsTo(this.function);
+    workspaceTable.grantReadData(this.function);
   }
 }

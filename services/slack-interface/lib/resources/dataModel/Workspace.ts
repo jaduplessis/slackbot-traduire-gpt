@@ -13,7 +13,7 @@ export const WorkspaceEntity = new Entity({
     },
     team_id: ["PK", 0, { type: "string", required: true }],
     name: { type: "string" },
-    scope: { type: "list" },
+    scope: { type: "string" },
     token_type: { type: "string" },
     access_token: { type: "string", required: true },
     bot_user_id: { type: "string", required: true },

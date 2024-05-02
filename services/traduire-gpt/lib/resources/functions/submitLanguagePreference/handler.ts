@@ -14,7 +14,7 @@ const eventBridge = new EventBridgeAdapter();
 export const handler = async (
   event: EventBridgeEvent<"submit.api.key", SubmitApiKeyEvent>
 ) => {
-  const { token, user_id, body } = event.detail;
+  const {accessToken, token, user_id, body } = event.detail;
 
   const primaryLanguage = getStateValues(body, "primary_language_input");
   if (primaryLanguage) {
@@ -40,7 +40,7 @@ export const handler = async (
     return;
   }
 
-  const { app, awsLambdaReceiver } = SlackAppAdapter();
+  const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
   await app.client.chat.postMessage({
     token,
@@ -54,6 +54,7 @@ export const handler = async (
   await eventBridge.putEvent(
     "application.slackIntegration",
     {
+      accessToken,
       token,
       user_id,
     },

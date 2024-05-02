@@ -32,7 +32,6 @@ export class SubmitLanguagePreference extends Construct {
     const accountId = Stack.of(this).account;
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
-    const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
 
     this.function = new SlackCustomResource(
       this,
@@ -41,7 +40,6 @@ export class SubmitLanguagePreference extends Construct {
         lambdaEntry: getCdkHandlerPath(__dirname),
         environment: {
           SLACK_SIGNING_SECRET,
-          SLACK_BOT_TOKEN,
           EVENT_BUS: eventBus.eventBusName,
         },
       }
