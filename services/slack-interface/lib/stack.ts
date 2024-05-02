@@ -17,12 +17,12 @@ export class SlackInterfaceStack extends Stack {
     const stage = getStage();
 
     const eventBridge = new EventBridge(this, "event-bridge", {
-      eventBusName: buildResourceName("translate-event-bus"),
+      eventBusName: buildResourceName("traduire-global-event-bus"),
     });
 
     const slackIntegration = new SlackIntegration(
       this,
-      "translate-slack-integration",
+      "traduire-slack-integration",
       {
         eventBus: eventBridge.eventBus,
       }

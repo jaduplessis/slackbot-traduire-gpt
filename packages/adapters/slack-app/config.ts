@@ -1,7 +1,7 @@
 import { App, AwsLambdaReceiver } from "@slack/bolt";
 import { getEnvVariable } from "@slackbot/helpers";
 
-export const instantiateApp = (): {
+export const SlackAppAdapter = (): {
   app: App;
   awsLambdaReceiver: AwsLambdaReceiver;
 } => {

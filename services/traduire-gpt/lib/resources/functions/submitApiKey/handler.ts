@@ -3,10 +3,14 @@ import {
   PutParameterCommandInput,
   SSMClient,
 } from "@aws-sdk/client-ssm";
-import { EventBridgeAdapter } from "@slackbot/cdk-constructs";
-import { buildResourceName, getRegion } from "@slackbot/helpers";
+import { EventBridgeAdapter, SlackAppAdapter } from "@slackbot/adapters";
+import {
+  buildResourceName,
+  getRegion,
+  getStateValues,
+  SubmitApiKeyEvent,
+} from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
-import { getStateValues, instantiateApp, SubmitApiKeyEvent } from "../../utils";
 
 const ssm = new SSMClient({ region: getRegion() });
 const eventBridge = new EventBridgeAdapter();
@@ -18,7 +22,7 @@ export const handler = async (
 
   const apiKey = getStateValues(body, "api_key_input");
 
-  const { app, awsLambdaReceiver } = instantiateApp();
+  const { app, awsLambdaReceiver } = SlackAppAdapter();
 
   const parameterName = buildResourceName("api-keys/OPENAI_API_KEY");
 

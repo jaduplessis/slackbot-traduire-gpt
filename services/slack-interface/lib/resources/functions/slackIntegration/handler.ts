@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 
-import { EventBridgeAdapter, instantiateApp } from "@slackbot/adapters";
+import { EventBridgeAdapter, SlackAppAdapter } from "@slackbot/adapters";
 import { BaseEvent } from "@slackbot/helpers";
 
 const eventBridge = new EventBridgeAdapter();
@@ -10,8 +10,7 @@ export const handler: APIGatewayProxyHandler = async (
   context,
   callback
 ) => {
-  const { app, awsLambdaReceiver } = instantiateApp();
-  console.log("app", app);
+  const { app, awsLambdaReceiver } = SlackAppAdapter();
 
   app.event(
     "app_home_opened",
@@ -47,6 +46,7 @@ export const handler: APIGatewayProxyHandler = async (
   app.action("remove_api_key", async ({ ack, body, context }) => {
     await ack();
 
+    console.log(`Removing API key...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
@@ -60,6 +60,7 @@ export const handler: APIGatewayProxyHandler = async (
   app.action("submit_language_preference", async ({ ack, body, context }) => {
     await ack();
 
+    console.log(`Language preference submitted. Updating...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
@@ -72,6 +73,7 @@ export const handler: APIGatewayProxyHandler = async (
   });
 
   app.message(async ({ message }) => {
+    console.log(`Message received: ${message}. Translating...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {

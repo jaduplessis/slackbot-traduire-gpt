@@ -3,10 +3,9 @@ import {
   DeleteParameterCommandInput,
   SSMClient,
 } from "@aws-sdk/client-ssm";
-import { EventBridgeAdapter } from "@slackbot/cdk-constructs";
-import { buildResourceName, getRegion } from "@slackbot/helpers";
+import { EventBridgeAdapter, SlackAppAdapter } from "@slackbot/adapters";
+import { BaseEvent, buildResourceName, getRegion } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
-import { BaseEvent, instantiateApp } from "../../utils";
 
 const ssm = new SSMClient({ region: getRegion() });
 const eventBridge = new EventBridgeAdapter();
@@ -15,7 +14,7 @@ export const handler = async (
   event: EventBridgeEvent<"remove.api.key", BaseEvent>
 ) => {
   const { token, user_id } = event.detail;
-  const { app, awsLambdaReceiver } = instantiateApp();
+  const { app, awsLambdaReceiver } = SlackAppAdapter();
 
   const parameterName = buildResourceName("api-keys/OPENAI_API_KEY");
 

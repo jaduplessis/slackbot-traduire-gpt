@@ -1,5 +1,6 @@
 export { buildParameterArnSsm } from "./build-parameter-arn-ssm";
 export { buildResourceName } from "./build-resource-name";
+export { eventBusName } from "./event-bridge";
 export { getCdkHandlerPath } from "./get-cdk-handler-path";
 export { getParameter } from "./get-parameter-ssm";
 export { getRegion } from "./get-region";

@@ -1,77 +1,45 @@
 import { Stack } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
+import { DynamoDBConstruct } from "@slackbot/cdk-constructs";
+import { buildResourceName, eventBusName } from "@slackbot/helpers";
+import { EventBus } from "aws-cdk-lib/aws-events";
 import {
-  ApiGateway,
-  DynamoDBConstruct,
-  EventBridge,
-} from "@slackbot/cdk-constructs";
-import { buildResourceName, getStage } from "@slackbot/helpers";
-import {
-  AppHome,
   RemoveApiKey,
-  SlackAuthCallback,
-  SlackInstall,
-  SlackIntegration,
   SubmitApiKey,
   SubmitLanguagePreference,
   TranslateMessage,
 } from "./resources/functions";
 
-export class TranslateStack extends Stack {
+export class TraduireStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const stage = getStage();
-
-    const translateTable = new DynamoDBConstruct(this, "translateTable", {
-      tableName: buildResourceName("translations-table"),
+    const translateTable = new DynamoDBConstruct(this, "traduireTable", {
+      tableName: buildResourceName("traduire-table"),
     });
 
-    const eventBridge = new EventBridge(this, "event-bridge", {
-      eventBusName: buildResourceName("slackbot-event-bus"),
-    });
-
-    const slackIntegration = new SlackIntegration(
+    const eventBus = EventBus.fromEventBusName(
       this,
-      "translate-slack-integration",
-      {
-        eventBus: eventBridge.eventBus,
-      }
+      "EventBridge",
+      eventBusName
     );
-
-    const slackInstall = new SlackInstall(this, "slack-install");
-    const slackAuthCallback = new SlackAuthCallback(
-      this,
-      "slack-auth-callback"
-    );
-
-    new ApiGateway(this, "api-gateway", {
-      stage,
-      slackIntegration,
-      slackInstall,
-      slackAuthCallback,
-    });
-
-    new AppHome(this, "app-home", {
-      eventBus: eventBridge.eventBus,
-    });
 
     new SubmitApiKey(this, "submit-api-key", {
-      eventBus: eventBridge.eventBus,
+      eventBus: eventBus,
     });
 
     new RemoveApiKey(this, "remove-api-key", {
-      eventBus: eventBridge.eventBus,
+      eventBus: eventBus,
     });
 
     new SubmitLanguagePreference(this, "submit-language-preference", {
-      eventBus: eventBridge.eventBus,
+      eventBus: eventBus,
     });
 
     new TranslateMessage(this, "translate-message", {
       table: translateTable.table,
-      eventBus: eventBridge.eventBus,
+      eventBus: eventBus,
     });
   }
 }
