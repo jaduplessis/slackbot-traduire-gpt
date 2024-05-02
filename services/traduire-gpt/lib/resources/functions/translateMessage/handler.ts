@@ -11,9 +11,9 @@ const ssm = new SSMClient({ region: getRegion() });
 export const handler = async (
   event: EventBridgeEvent<"translate.message", MessageEvent>
 ) => {
-  const { message } = event.detail;
+  const { accessToken, message } = event.detail;
 
-  const { app, awsLambdaReceiver } = SlackAppAdapter();
+  const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
   const { primaryLanguage, secondaryLanguage } = await loadSsmValues(ssm);
 
@@ -47,7 +47,7 @@ export const handler = async (
   }
 
   await app.client.chat.postMessage({
-    token: getEnvVariable("SLACK_BOT_TOKEN"),
+    token: accessToken,
     channel,
     thread_ts: ts,
     blocks: [

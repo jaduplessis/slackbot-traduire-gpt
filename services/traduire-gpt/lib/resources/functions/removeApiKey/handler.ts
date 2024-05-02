@@ -13,8 +13,8 @@ const eventBridge = new EventBridgeAdapter();
 export const handler = async (
   event: EventBridgeEvent<"remove.api.key", BaseEvent>
 ) => {
-  const { token, user_id } = event.detail;
-  const { app, awsLambdaReceiver } = SlackAppAdapter();
+  const { accessToken, token, user_id } = event.detail;
+  const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
   const parameterName = buildResourceName("api-keys/OPENAI_API_KEY");
 
@@ -36,6 +36,7 @@ export const handler = async (
   await eventBridge.putEvent(
     "application.slackIntegration",
     {
+      accessToken,
       token,
       user_id,
     },

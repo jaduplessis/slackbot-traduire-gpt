@@ -1,7 +1,9 @@
 import { App, AwsLambdaReceiver } from "@slack/bolt";
 import { getEnvVariable } from "@slackbot/helpers";
 
-export const SlackAppAdapter = (): {
+export const SlackAppAdapter = (
+  accessToken: string
+): {
   app: App;
   awsLambdaReceiver: AwsLambdaReceiver;
 } => {
@@ -10,7 +12,7 @@ export const SlackAppAdapter = (): {
   });
 
   const app = new App({
-    token: getEnvVariable("SLACK_BOT_TOKEN"),
+    token: accessToken,
     receiver: awsLambdaReceiver,
   });
 

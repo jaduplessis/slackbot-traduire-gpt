@@ -34,7 +34,6 @@ export class TranslateMessage extends Construct {
     const accountId = Stack.of(this).account;
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
-    const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
 
     this.function = new SlackCustomResource(
       this,
@@ -44,7 +43,6 @@ export class TranslateMessage extends Construct {
         timeout: Duration.minutes(3),
         environment: {
           SLACK_SIGNING_SECRET,
-          SLACK_BOT_TOKEN,
           TABLE_NAME: table.tableName,
         },
       }

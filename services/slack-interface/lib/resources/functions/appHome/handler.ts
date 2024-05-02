@@ -10,8 +10,8 @@ const ssm = new SSMClient({ region: getRegion() });
 export const handler = async (
   event: EventBridgeEvent<"app.home.opened", BaseEvent>
 ) => {
-  const { token, user_id } = event.detail;
-  const { app, awsLambdaReceiver } = SlackAppAdapter();
+  const { accessToken, token, user_id } = event.detail;
+  const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
   const apiKey = await getParameter(ssm, "api-keys/OPENAI_API_KEY", true);
   const primaryLanguage = await getParameter(
