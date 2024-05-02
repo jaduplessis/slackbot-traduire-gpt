@@ -65,7 +65,11 @@
   "folders": [
     {
       "path": ".",
-      "name": "Slackbot-TraduireGPT root"
+      "name": "slackbot-traduire-gpt [root]"
+    },
+    {
+      "path": "services/slack-interface",
+      "name": "slack-interface [service]"
     },
     {
       "path": "services/traduire-gpt",
@@ -73,11 +77,15 @@
     },
     {
       "path": "packages/cdk-constructs",
-      "name": "cdk constructs [library]"
+      "name": "cdk-constructs [library]"
     },
     {
       "path": "packages/helpers",
       "name": "helpers [library]"
+    },
+    {
+      "path": "packages/adapters",
+      "name": "adapters[library]"
     }
   ]
 }
