@@ -6,11 +6,23 @@ interface CreateIntegrationsProps extends ApiGatewayProps {
 }
 
 export const createIntegrations = (props: CreateIntegrationsProps) => {
-  const { api } = props;
+  const { api, slackIntegration, slackInstall, slackAuthCallback } = props;
 
-  const slackIntegrationEndPoint = api.root.addResource("slack");
-  const slackIntegration = new LambdaIntegration(
-    props.slackIntegration.function
+  const slackEndPoint = api.root.addResource("slack");
+
+  const eventsIntegrationEndPoint = slackEndPoint.addResource("events");
+  const eventsIntegration = new LambdaIntegration(slackIntegration.function);
+  eventsIntegrationEndPoint.addMethod("POST", eventsIntegration);
+
+  // auth callback URL
+  const oauthCallbackEndPoint = slackEndPoint.addResource("auth");
+  const oauthCallbackIntegration = new LambdaIntegration(
+    slackAuthCallback.function
   );
-  slackIntegrationEndPoint.addMethod("POST", slackIntegration);
+  oauthCallbackEndPoint.addMethod("GET", oauthCallbackIntegration);
+
+  // Install URL
+  const oauthInstallEndPoint = slackEndPoint.addResource("install");
+  const oauthInstallIntegration = new LambdaIntegration(slackInstall.function);
+  oauthInstallEndPoint.addMethod("GET", oauthInstallIntegration);
 };
