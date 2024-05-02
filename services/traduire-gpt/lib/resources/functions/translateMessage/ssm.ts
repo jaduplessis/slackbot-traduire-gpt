@@ -1,5 +1,5 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
-import { getParameter } from "../../utils";
+import { getParameter } from "@slackbot/helpers";
 
 interface SsmValues {
   primaryLanguage: string | undefined;

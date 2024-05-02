@@ -10,14 +10,14 @@ import {
 } from "@slackbot/helpers";
 import { Duration, Stack } from "aws-cdk-lib";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
-import { EventBus, Rule } from "aws-cdk-lib/aws-events";
+import { IEventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 interface translateMessageProps {
   table: Table;
-  eventBus: EventBus;
+  eventBus: IEventBus;
 }
 
 export class TranslateMessage extends Construct {

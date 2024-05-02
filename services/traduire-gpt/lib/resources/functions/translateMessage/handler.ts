@@ -1,19 +1,19 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
-import { getEnvVariable, getRegion } from "@slackbot/helpers";
+import { SlackAppAdapter } from "@slackbot/adapters";
+import { getEnvVariable, getRegion, MessageEvent } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
 import { translate } from "traduire-gpt";
 import { TranslateEntity } from "../../dataModel/Translate";
-import { instantiateApp, MessageEvent } from "../../utils";
 import { loadSsmValues } from "./ssm";
 
 const ssm = new SSMClient({ region: getRegion() });
 
 export const handler = async (
-  event: EventBridgeEvent<"submit.api.key", MessageEvent>
+  event: EventBridgeEvent<"translate.message", MessageEvent>
 ) => {
   const { message } = event.detail;
 
-  const { app, awsLambdaReceiver } = instantiateApp();
+  const { app, awsLambdaReceiver } = SlackAppAdapter();
 
   const { primaryLanguage, secondaryLanguage } = await loadSsmValues(ssm);
 
