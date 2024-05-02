@@ -1,7 +1,6 @@
 import { getArg } from "./getArg";
 
-// If we haven't set a project name at all it'll default to india-first
-const defaultProjectName = "india-first";
+const defaultProjectName = "my-project-name";
 
 export const getProjectName = (): string => {
   return getArg({
