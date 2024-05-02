@@ -24,7 +24,7 @@ export const handler = async (
     "language-preference/SECONDARY_LANGUAGE",
     false
   );
-  console.log("apiKey", apiKey);
+  
   const homeView = createHome(apiKey, primaryLanguage, secondaryLanguage);
 
   try {

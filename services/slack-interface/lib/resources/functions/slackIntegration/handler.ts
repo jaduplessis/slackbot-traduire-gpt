@@ -46,7 +46,6 @@ export const handler: APIGatewayProxyHandler = async (
   app.action("remove_api_key", async ({ ack, body, context }) => {
     await ack();
 
-    console.log(`Removing API key...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
@@ -60,7 +59,6 @@ export const handler: APIGatewayProxyHandler = async (
   app.action("submit_language_preference", async ({ ack, body, context }) => {
     await ack();
 
-    console.log(`Language preference submitted. Updating...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
@@ -73,7 +71,6 @@ export const handler: APIGatewayProxyHandler = async (
   });
 
   app.message(async ({ message }) => {
-    console.log(`Message received: ${message}. Translating...`);
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
