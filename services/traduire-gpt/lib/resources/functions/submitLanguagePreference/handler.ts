@@ -1,13 +1,12 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
-import { EventBridgeAdapter } from "@slackbot/cdk-constructs";
-import { getRegion } from "@slackbot/helpers";
-import { EventBridgeEvent } from "aws-lambda";
+import { EventBridgeAdapter, SlackAppAdapter } from "@slackbot/adapters";
 import {
+  getRegion,
   getStateValues,
-  instantiateApp,
   SubmitApiKeyEvent,
   uploadParameter,
-} from "../../utils";
+} from "@slackbot/helpers";
+import { EventBridgeEvent } from "aws-lambda";
 
 const ssm = new SSMClient({ region: getRegion() });
 const eventBridge = new EventBridgeAdapter();
@@ -41,7 +40,7 @@ export const handler = async (
     return;
   }
 
-  const { app, awsLambdaReceiver } = instantiateApp();
+  const { app, awsLambdaReceiver } = SlackAppAdapter();
 
   await app.client.chat.postMessage({
     token,

@@ -7,4 +7,6 @@ interface RestApiFunctions {
 export interface ApiGatewayProps {
   stage: string;
   slackIntegration: RestApiFunctions;
+  slackInstall: RestApiFunctions;
+  slackAuthCallback: RestApiFunctions;
 }

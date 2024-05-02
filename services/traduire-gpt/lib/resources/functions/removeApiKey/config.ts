@@ -8,14 +8,14 @@ import {
   getEnvVariable,
   getRegion,
 } from "@slackbot/helpers";
-import { Duration, Stack } from "aws-cdk-lib";
-import { EventBus, Rule } from "aws-cdk-lib/aws-events";
+import { Stack } from "aws-cdk-lib";
+import { IEventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 interface removeApiKeyProps {
-  eventBus: EventBus;
+  eventBus: IEventBus;
 }
 
 export class RemoveApiKey extends Construct {

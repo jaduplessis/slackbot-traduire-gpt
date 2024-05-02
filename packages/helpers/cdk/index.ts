@@ -1,8 +1,11 @@
 export { buildParameterArnSsm } from "./build-parameter-arn-ssm";
 export { buildResourceName } from "./build-resource-name";
+export { eventBusName } from "./event-bridge";
 export { getCdkHandlerPath } from "./get-cdk-handler-path";
+export { getParameter } from "./get-parameter-ssm";
 export { getRegion } from "./get-region";
 export { getStackName } from "./get-stack-name";
 export { getStage } from "./get-stage";
 export { isDev, isProduction } from "./is-production";
 export { sharedLambdaEsbuildConfig } from "./shared-config";
+export { uploadParameter } from "./upload-parameter-ssm";
