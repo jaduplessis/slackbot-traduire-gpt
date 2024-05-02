@@ -9,7 +9,6 @@ export const handler: APIGatewayProxyHandler = async () => {
     </html>
   `;
 
-  console.log("html", html);
   return {
     statusCode: 200,
     headers: {

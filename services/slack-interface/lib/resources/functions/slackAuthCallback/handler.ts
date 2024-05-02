@@ -12,7 +12,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       body: "Missing code",
     };
   }
-  console.log("code", code);
 
   // Exchange code for token: curl -F code=1234 -F client_id=3336676.569200954261 -F client_secret=ABCDEFGH https://slack.com/api/oauth.v2.access
   const url = "https://slack.com/api/oauth.v2.access";
