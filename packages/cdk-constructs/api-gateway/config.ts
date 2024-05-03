@@ -1,5 +1,6 @@
 import { buildResourceName } from "@slackbot/helpers";
 import { ApiKeySourceType, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { createIntegrations } from "./integrations";
 import { ApiGatewayProps } from "./types";
@@ -25,5 +26,13 @@ export class ApiGateway extends Construct {
     });
 
     createIntegrations({ ...props, api: this.restApi });
+
+    const parameterName = buildResourceName("system/api-gateway-url");
+
+    // Create SSM parameter for the API Gateway URL
+    new StringParameter(this, "api-gateway-url", {
+      parameterName: `/${parameterName}`,
+      stringValue: this.restApi.url,
+    });
   }
 }
