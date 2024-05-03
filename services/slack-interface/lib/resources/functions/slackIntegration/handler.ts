@@ -10,8 +10,7 @@ export const handler: APIGatewayProxyHandler = async (
   context,
   callback
 ) => {
-  console.log(`Received event: ${JSON.stringify(event)}`);
-  const accessToken = await getAccessToken(event);
+  const { teamId, accessToken } = await getAccessToken(event);
 
   const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
@@ -25,6 +24,7 @@ export const handler: APIGatewayProxyHandler = async (
         "application.slackIntegration",
         {
           accessToken,
+          teamId,
           token,
           user_id,
         },
@@ -40,6 +40,7 @@ export const handler: APIGatewayProxyHandler = async (
       "application.slackIntegration",
       {
         accessToken,
+        teamId,
         token: context.botToken,
         user_id: body.user.id,
         body,
@@ -55,6 +56,7 @@ export const handler: APIGatewayProxyHandler = async (
       "application.slackIntegration",
       {
         accessToken,
+        teamId,
         token: context.botToken,
         user_id: body.user.id,
       },
@@ -69,6 +71,7 @@ export const handler: APIGatewayProxyHandler = async (
       "application.slackIntegration",
       {
         accessToken,
+        teamId,
         token: context.botToken,
         user_id: body.user.id,
         body,
@@ -82,6 +85,7 @@ export const handler: APIGatewayProxyHandler = async (
       "application.slackIntegration",
       {
         accessToken,
+        teamId,
         message,
       },
       "translate.message"

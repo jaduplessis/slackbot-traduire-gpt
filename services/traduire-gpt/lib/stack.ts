@@ -5,6 +5,7 @@ import { DynamoDBConstruct } from "@slackbot/cdk-constructs";
 import { buildResourceName, eventBusName } from "@slackbot/helpers";
 import { EventBus } from "aws-cdk-lib/aws-events";
 import {
+  AppHome,
   RemoveApiKey,
   SubmitApiKey,
   SubmitLanguagePreference,
@@ -26,20 +27,26 @@ export class TraduireStack extends Stack {
     );
 
     new SubmitApiKey(this, "submit-api-key", {
-      eventBus: eventBus,
+      eventBus,
     });
 
     new RemoveApiKey(this, "remove-api-key", {
-      eventBus: eventBus,
+      eventBus,
     });
 
     new SubmitLanguagePreference(this, "submit-language-preference", {
-      eventBus: eventBus,
+      traduireTable: translateTable.table,
+      eventBus,
     });
 
     new TranslateMessage(this, "translate-message", {
-      table: translateTable.table,
-      eventBus: eventBus,
+      eventBus,
+      traduireTable: translateTable.table,
+    });
+
+    new AppHome(this, "app-home", {
+      eventBus,
+      traduireTable: translateTable.table,
     });
   }
 }

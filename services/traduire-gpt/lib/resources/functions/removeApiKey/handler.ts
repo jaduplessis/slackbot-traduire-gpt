@@ -13,10 +13,10 @@ const eventBridge = new EventBridgeAdapter();
 export const handler = async (
   event: EventBridgeEvent<"remove.api.key", BaseEvent>
 ) => {
-  const { accessToken, token, user_id } = event.detail;
+  const { accessToken, teamId, token, user_id } = event.detail;
   const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
-  const parameterName = buildResourceName("api-keys/OPENAI_API_KEY");
+  const parameterName = buildResourceName(`api-keys/${teamId}OPENAI_API_KEY`);
 
   const input: DeleteParameterCommandInput = {
     Name: `/${parameterName}`,

@@ -9,19 +9,25 @@ import {
   getRegion,
 } from "@slackbot/helpers";
 import { Stack } from "aws-cdk-lib";
-import { EventBus, Rule } from "aws-cdk-lib/aws-events";
+import { Table } from "aws-cdk-lib/aws-dynamodb";
+import { IEventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 interface appHomeProps {
-  eventBus: EventBus;
+  eventBus: IEventBus;
+  traduireTable: Table;
 }
 
 export class AppHome extends Construct {
   public function: NodejsFunction;
 
-  constructor(scope: Construct, id: string, { eventBus }: appHomeProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { eventBus, traduireTable }: appHomeProps
+  ) {
     super(scope, id);
 
     const region = getRegion();
@@ -40,6 +46,8 @@ export class AppHome extends Construct {
       }
     );
 
+    traduireTable.grantReadWriteData(this.function);
+
     new Rule(this, buildResourceName("on-app-home-opened-event"), {
       eventBus,
       eventPattern: {
@@ -50,18 +58,10 @@ export class AppHome extends Construct {
     });
 
     const accessPatternApiKey = buildResourceName("api-keys/*");
-    const accessPatternLanguagePreference = buildResourceName(
-      "language-preference/*"
-    );
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
       resources: [
         buildParameterArnSsm(`${accessPatternApiKey}`, region, accountId),
-        buildParameterArnSsm(
-          `${accessPatternLanguagePreference}`,
-          region,
-          accountId
-        ),
       ],
     });
     this.function.addToRolePolicy(ssmReadPolicy);

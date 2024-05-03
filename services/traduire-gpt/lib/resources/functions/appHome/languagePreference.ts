@@ -1,8 +1,8 @@
 import { Block, KnownBlock } from "@slack/bolt";
 
 export const getLanguagePreferenceBlocks = (
-  primaryLanguage: string | undefined,
-  secondaryLanguage: string | undefined
+  primaryLanguage: string,
+  secondaryLanguage: string
 ): (Block | KnownBlock)[] => {
  
   return [
@@ -37,7 +37,7 @@ export const getLanguagePreferenceBlocks = (
       },
       label: {
         type: "plain_text",
-        text: `Primary Language: ${primaryLanguage || "English"}`,
+        text: `Primary Language: ${primaryLanguage}`,
       },
     },
     {
@@ -62,7 +62,7 @@ export const getLanguagePreferenceBlocks = (
       },
       label: {
         type: "plain_text",
-        text: `Secondary Language: ${secondaryLanguage || "French"}`,
+        text: `Secondary Language: ${secondaryLanguage}`,
       },
     },
     {

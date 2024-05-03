@@ -4,8 +4,8 @@ import { getLanguagePreferenceBlocks } from "./languagePreference";
 
 export const createHome = (
   apiKey: string | undefined,
-  primaryLanguage: string | undefined,
-  secondaryLanguage: string | undefined
+  primaryLanguage: string,
+  secondaryLanguage: string
 ): HomeView => {
   // Block to request the user to input the API key if undefined
   const apiKeyBlock = getApiKeyBlocks(apiKey);
