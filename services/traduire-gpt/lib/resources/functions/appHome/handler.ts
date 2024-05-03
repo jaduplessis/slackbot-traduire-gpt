@@ -14,7 +14,7 @@ export const handler = async (
   const { accessToken, teamId, token, user_id } = event.detail;
   const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
-  const apiKey = await getParameter(ssm, "api-keys/OPENAI_API_KEY", true);
+  const apiKey = await getParameter(ssm, `api-keys/${teamId}/OPENAI_API_KEY`, true);
   const settings = await getSettingsFromTeamId(teamId);
   const { primaryLanguage, secondaryLanguage } = settings;
   
