@@ -2,9 +2,11 @@ import { BasicSlackEvent, BlockAction, EnvelopedEvent } from "@slack/bolt";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { WorkspaceEntity } from "../../dataModel";
 
+
 export const getAccessToken = async (
   event: APIGatewayProxyEvent
 ): Promise<{ teamId: string; accessToken: string }> => {
+  console.log("Event: ", event);
   if (!event.body) {
     throw new Error("No event body");
   }
@@ -43,6 +45,13 @@ export const getAccessToken = async (
       const envelopedEvent = payload as EnvelopedEvent<BasicSlackEvent>;
       teamId = envelopedEvent.team_id;
       break;
+
+    case "url_verification":
+      const challenge = payload.challenge;
+      return {
+        teamId: "",
+        accessToken: challenge,
+      };
 
     default:
       throw new Error(`Event type not supported: ${type}`);
