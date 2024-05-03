@@ -4,26 +4,19 @@ import { EventBridgeEvent } from "aws-lambda";
 import { BaseEvent, getParameter } from "@slackbot/helpers"
 import { SlackAppAdapter } from "@slackbot/adapters";  
 import { createHome } from "./appHome";
+import { getSettingsFromTeamId } from "../utils";
 
 const ssm = new SSMClient({ region: getRegion() });
 
 export const handler = async (
   event: EventBridgeEvent<"app.home.opened", BaseEvent>
 ) => {
-  const { token, user_id } = event.detail;
-  const { app, awsLambdaReceiver } = SlackAppAdapter();
+  const { accessToken, teamId, token, user_id } = event.detail;
+  const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
-  const apiKey = await getParameter(ssm, "api-keys/OPENAI_API_KEY", true);
-  const primaryLanguage = await getParameter(
-    ssm,
-    "language-preference/PRIMARY_LANGUAGE",
-    false
-  );
-  const secondaryLanguage = await getParameter(
-    ssm,
-    "language-preference/SECONDARY_LANGUAGE",
-    false
-  );
+  const apiKey = await getParameter(ssm, `api-keys/${teamId}/OPENAI_API_KEY`, true);
+  const settings = await getSettingsFromTeamId(teamId);
+  const { primaryLanguage, secondaryLanguage } = settings;
   
   const homeView = createHome(apiKey, primaryLanguage, secondaryLanguage);
 

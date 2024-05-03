@@ -1,0 +1,1 @@
+export { getSettingsFromTeamId } from "./getSettingsFromTeamId";

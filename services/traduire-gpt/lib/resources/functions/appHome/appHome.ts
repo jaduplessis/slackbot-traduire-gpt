@@ -4,8 +4,8 @@ import { getLanguagePreferenceBlocks } from "./languagePreference";
 
 export const createHome = (
   apiKey: string | undefined,
-  primaryLanguage: string | undefined,
-  secondaryLanguage: string | undefined
+  primaryLanguage: string,
+  secondaryLanguage: string
 ): HomeView => {
   // Block to request the user to input the API key if undefined
   const apiKeyBlock = getApiKeyBlocks(apiKey);
@@ -30,7 +30,7 @@ export const createHome = (
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*How to use* \n1. Add this app to your channel. \n2. Type `/traduire <text>` in the channel to get translations of the text.\n\n",
+        text: "*How to use* \n1. Add this app to your channel. \n2. Type `/invite @traduire-gpt` in the channel to get automatic translations of the posts in your channel!.\n\n",
       },
     },
     {
