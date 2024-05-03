@@ -4,9 +4,9 @@ import {
   getRegion,
   getStateValues,
   SubmitApiKeyEvent,
-  uploadParameter,
 } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
+import { SettingsEntity } from "../../dataModel/Settings";
 
 const ssm = new SSMClient({ region: getRegion() });
 const eventBridge = new EventBridgeAdapter();
@@ -14,26 +14,22 @@ const eventBridge = new EventBridgeAdapter();
 export const handler = async (
   event: EventBridgeEvent<"submit.api.key", SubmitApiKeyEvent>
 ) => {
-  const {accessToken, token, user_id, body } = event.detail;
+  const { accessToken, teamId, token, user_id, body } = event.detail;
 
   const primaryLanguage = getStateValues(body, "primary_language_input");
   if (primaryLanguage) {
-    await uploadParameter(
-      ssm,
-      "language-preference/PRIMARY_LANGUAGE",
+    await SettingsEntity.update({
+      teamId,
       primaryLanguage,
-      false
-    );
+    });
   }
 
   const secondaryLanguage = getStateValues(body, "secondary_language_input");
   if (secondaryLanguage) {
-    await uploadParameter(
-      ssm,
-      "language-preference/SECONDARY_LANGUAGE",
+    await SettingsEntity.update({
+      teamId,
       secondaryLanguage,
-      false
-    );
+    });
   }
 
   if (!primaryLanguage && !secondaryLanguage) {
@@ -55,6 +51,7 @@ export const handler = async (
     "application.slackIntegration",
     {
       accessToken,
+      teamId,
       token,
       user_id,
     },

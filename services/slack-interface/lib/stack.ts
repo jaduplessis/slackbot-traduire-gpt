@@ -8,7 +8,6 @@ import {
 } from "@slackbot/cdk-constructs";
 import { buildResourceName, getStage } from "@slackbot/helpers";
 import {
-  AppHome,
   SlackAuthCallback,
   SlackInstall,
   SlackIntegration,
@@ -26,9 +25,9 @@ export class SlackInterfaceStack extends Stack {
 
     const workspaceTable = new DynamoDBConstruct(
       this,
-      "traduire-workspace-table",
+      "workspace-table",
       {
-        tableName: buildResourceName("traduire-workspace-table"),
+        tableName: buildResourceName("workspace-table"),
       }
     );
 
@@ -55,10 +54,6 @@ export class SlackInterfaceStack extends Stack {
       slackIntegration,
       slackInstall,
       slackAuthCallback,
-    });
-
-    new AppHome(this, "app-home", {
-      eventBus: eventBridge.eventBus,
     });
   }
 }

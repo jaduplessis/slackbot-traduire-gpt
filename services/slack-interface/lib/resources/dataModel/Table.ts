@@ -8,7 +8,7 @@ const documentClient = new DynamoDB({
 });
 
 export const SlackWorkspaceTable = new Table({
-  name: buildResourceName("traduire-workspace-table"),
+  name: buildResourceName("workspace-table"),
   partitionKey: "PK",
   sortKey: "SK",
   indexes: {

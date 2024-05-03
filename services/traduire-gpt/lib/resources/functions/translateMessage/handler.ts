@@ -1,9 +1,9 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
 import { SlackAppAdapter } from "@slackbot/adapters";
-import { getEnvVariable, getRegion, MessageEvent } from "@slackbot/helpers";
+import { getRegion, MessageEvent } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
 import { translate } from "traduire-gpt";
-import { TranslateEntity } from "../../dataModel/Translate";
+import { TraduireEntity } from "../../dataModel/Traduire";
 import { loadSsmValues } from "./ssm";
 
 const ssm = new SSMClient({ region: getRegion() });
@@ -11,11 +11,14 @@ const ssm = new SSMClient({ region: getRegion() });
 export const handler = async (
   event: EventBridgeEvent<"translate.message", MessageEvent>
 ) => {
-  const { accessToken, message } = event.detail;
+  const { accessToken, teamId, message } = event.detail;
 
   const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
-  const { primaryLanguage, secondaryLanguage } = await loadSsmValues(ssm);
+  const { primaryLanguage, secondaryLanguage } = await loadSsmValues(
+    ssm,
+    teamId
+  );
 
   if (message === undefined || message.text === undefined) {
     return;
@@ -26,7 +29,7 @@ export const handler = async (
     return;
   }
 
-  const translateEntity = await TranslateEntity.get({
+  const translateEntity = await TraduireEntity.get({
     PK: ts,
     SK: "ROOT",
   });
@@ -34,8 +37,9 @@ export const handler = async (
   if (translateEntity.Item) {
     return;
   } else {
-    await TranslateEntity.update({
-      PK: ts,
+    await TraduireEntity.update({
+      messageTs: ts,
+      teamId,
       messageSent: "PENDING",
     });
   }
@@ -61,9 +65,9 @@ export const handler = async (
     ],
   });
 
-  await TranslateEntity.update({
-    PK: ts,
-    SK: "ROOT",
+  await TraduireEntity.update({
+    messageTs: ts,
+    teamId,
     messageSent: "SENT",
     text,
     translation,
