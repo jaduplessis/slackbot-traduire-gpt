@@ -48,6 +48,7 @@ export const handler = async (
     "application.slackIntegration",
     {
       accessToken,
+      teamId,
       token,
       user_id,
     },
