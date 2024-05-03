@@ -57,9 +57,31 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const html = `
     <html>
+      <head>
+        <style>
+          body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+          }
+          h1 {
+            color: #4CAF50;
+          }
+          p {
+            font-size: 1.2em;
+          }
+        </style>
+      </head>
       <body>
-        <h1>Success</h1>
-        <p>Your token is: ${JSON.stringify(workspaceResponse)}</p>
+        <div class="container">
+          <h1>Installation Successful!</h1>
+          <p>Thank you for installing our Traduire-GPT. We're excited to have you on board!</p>
+        </div>
       </body>
     </html>
   `;
