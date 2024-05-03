@@ -5,19 +5,21 @@ import { SlackWorkspaceTable } from "./Table";
 export const WorkspaceEntity = new Entity({
   name: "WorkspaceItem",
   attributes: {
-    PK: { partitionKey: true, hidden: true, prefix: "TEAM#" },
+    PK: { partitionKey: true, hidden: true, prefix: "TEAM_ID#" },
     SK: {
       sortKey: true,
       hidden: true,
       default: "WORKSPACE",
     },
-    team_id: ["PK", 0, { type: "string", required: true }],
+    teamId: ["PK", 0, { type: "string", required: true }],
     name: { type: "string" },
-    scope: { type: "list" },
-    token_type: { type: "string" },
-    access_token: { type: "string", required: true },
-    bot_user_id: { type: "string", required: true },
+    scope: { type: "string" },
+    tokenType: { type: "string" },
+    accessToken: { type: "string", required: true },
+    botUserId: { type: "string", required: true },
     enterprise: { type: "string" },
+    primaryLanguage: { type: "string", default: "English" },
+    secondaryLanguage: { type: "string", default: "French" },
   },
   table: SlackWorkspaceTable,
 } as const);

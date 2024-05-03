@@ -1,6 +1,7 @@
 import { getEnvVariable } from "@slackbot/helpers";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import axios from "axios";
+import { WorkspaceEntity } from "../../dataModel/Workspace";
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const { queryStringParameters } = event;
@@ -13,7 +14,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
-  // Exchange code for token: curl -F code=1234 -F client_id=3336676.569200954261 -F client_secret=ABCDEFGH https://slack.com/api/oauth.v2.access
   const url = "https://slack.com/api/oauth.v2.access";
   const response = await axios.post(
     url,
@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       client_id: getEnvVariable("SLACK_CLIENT_ID"),
       client_secret: getEnvVariable("SLACK_CLIENT_SECRET"),
       redirect_uri:
-        "https://51j0vgmkei.execute-api.eu-west-2.amazonaws.com/dev-oauth/slack/auth",
+        "https://jwp2d5n2c8.execute-api.eu-west-2.amazonaws.com/dev/slack/auth",
     })
   );
 
@@ -33,11 +33,29 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
+  const { data } = response;
+  if (!data.ok) {
+    return {
+      statusCode: 400,
+      body: "Failed to exchange code for token",
+    };
+  }
+
+  const workspaceResponse = await WorkspaceEntity.update({
+    team_id: data.team.id,
+    name: data.team.name,
+    scope: data.scope,
+    token_type: data.token_type,
+    access_token: data.access_token,
+    bot_user_id: data.bot_user_id,
+    enterprise: data.enterprise,
+  });
+
   const html = `
     <html>
       <body>
         <h1>Success</h1>
-        <p>Your token is: ${JSON.stringify(response.data)}</p>
+        <p>Your token is: ${JSON.stringify(workspaceResponse)}</p>
       </body>
     </html>
   `;

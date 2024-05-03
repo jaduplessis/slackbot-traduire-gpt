@@ -16,8 +16,8 @@ import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 interface translateMessageProps {
-  table: Table;
   eventBus: IEventBus;
+  traduireTable: Table;
 }
 
 export class TranslateMessage extends Construct {
@@ -26,7 +26,7 @@ export class TranslateMessage extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { table, eventBus }: translateMessageProps
+    { traduireTable, eventBus }: translateMessageProps
   ) {
     super(scope, id);
 
@@ -34,7 +34,6 @@ export class TranslateMessage extends Construct {
     const accountId = Stack.of(this).account;
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
-    const SLACK_BOT_TOKEN = getEnvVariable("SLACK_BOT_TOKEN");
 
     this.function = new SlackCustomResource(
       this,
@@ -44,13 +43,11 @@ export class TranslateMessage extends Construct {
         timeout: Duration.minutes(3),
         environment: {
           SLACK_SIGNING_SECRET,
-          SLACK_BOT_TOKEN,
-          TABLE_NAME: table.tableName,
         },
       }
     );
 
-    table.grantReadWriteData(this.function);
+    traduireTable.grantReadWriteData(this.function);
 
     new Rule(this, buildResourceName("on-message-translated-event"), {
       eventBus,
@@ -62,13 +59,11 @@ export class TranslateMessage extends Construct {
     });
 
     const apiAccessPattern = buildResourceName("api-keys/*");
-    const languageAccessPattern = buildResourceName("language-preferences/*");
 
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
       resources: [
         buildParameterArnSsm(`${apiAccessPattern}`, region, accountId),
-        buildParameterArnSsm(`${languageAccessPattern}`, region, accountId),
       ],
     });
 

@@ -1,10 +1,13 @@
 import { Stack } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
-import { ApiGateway, EventBridge } from "@slackbot/cdk-constructs";
+import {
+  ApiGateway,
+  DynamoDBConstruct,
+  EventBridge,
+} from "@slackbot/cdk-constructs";
 import { buildResourceName, getStage } from "@slackbot/helpers";
 import {
-  AppHome,
   SlackAuthCallback,
   SlackInstall,
   SlackIntegration,
@@ -20,18 +23,30 @@ export class SlackInterfaceStack extends Stack {
       eventBusName: buildResourceName("traduire-global-event-bus"),
     });
 
+    const workspaceTable = new DynamoDBConstruct(
+      this,
+      "workspace-table",
+      {
+        tableName: buildResourceName("workspace-table"),
+      }
+    );
+
     const slackIntegration = new SlackIntegration(
       this,
       "traduire-slack-integration",
       {
         eventBus: eventBridge.eventBus,
+        workspaceTable: workspaceTable.table,
       }
     );
 
     const slackInstall = new SlackInstall(this, "slack-install");
     const slackAuthCallback = new SlackAuthCallback(
       this,
-      "slack-auth-callback"
+      "slack-auth-callback",
+      {
+        workspaceTable: workspaceTable.table,
+      }
     );
 
     new ApiGateway(this, "api-gateway", {
@@ -39,10 +54,6 @@ export class SlackInterfaceStack extends Stack {
       slackIntegration,
       slackInstall,
       slackAuthCallback,
-    });
-
-    new AppHome(this, "app-home", {
-      eventBus: eventBridge.eventBus,
     });
   }
 }
