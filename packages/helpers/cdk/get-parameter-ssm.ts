@@ -10,6 +10,7 @@ export const getParameter = async (
     Name: `/${buildResourceName(parameter)}`,
     WithDecryption: encrypted,
   };
+  console.log("input", input);
 
   const command = new GetParameterCommand(input);
   try {
