@@ -19,7 +19,7 @@ services/traduire-gpt/cdk.out/dev-traduire-gpt.template.json
 services/traduire-gpt/cdk.out/manifest.json
 services/traduire-gpt/cdk.out/tree.json
 
-
 # .env.* except .env.example
 .env*
 !.env.example
+*.bkp
