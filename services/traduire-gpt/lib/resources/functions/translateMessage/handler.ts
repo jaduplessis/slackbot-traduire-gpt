@@ -3,7 +3,7 @@ import { SlackAppAdapter } from "@slackbot/adapters";
 import { getRegion, MessageEvent } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
 import { translate } from "traduire-gpt";
-import { TraduireEntity } from "../../dataModel/Traduire";
+import { TraduireEntity } from "../../dataModel";
 import { loadSsmValues } from "./ssm";
 
 const ssm = new SSMClient({ region: getRegion() });
