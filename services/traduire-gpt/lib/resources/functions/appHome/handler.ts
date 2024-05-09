@@ -1,10 +1,9 @@
 import { SSMClient } from "@aws-sdk/client-ssm";
-import { getRegion } from "@slackbot/helpers";
+import { SlackAppAdapter } from "@slackbot/adapters";
+import { BaseEvent, getParameter, getRegion } from "@slackbot/helpers";
 import { EventBridgeEvent } from "aws-lambda";
-import { BaseEvent, getParameter } from "@slackbot/helpers"
-import { SlackAppAdapter } from "@slackbot/adapters";  
-import { createHome } from "./appHome";
 import { getSettingsFromTeamId } from "../utils";
+import { createHome } from "./appHome";
 
 const ssm = new SSMClient({ region: getRegion() });
 
@@ -14,10 +13,14 @@ export const handler = async (
   const { accessToken, teamId, token, user_id } = event.detail;
   const { app, awsLambdaReceiver } = SlackAppAdapter(accessToken);
 
-  const apiKey = await getParameter(ssm, `api-keys/${teamId}/OPENAI_API_KEY`, true);
+  const apiKey = await getParameter(
+    ssm,
+    `api-keys/${teamId}/OPENAI_API_KEY`,
+    true
+  );
   const settings = await getSettingsFromTeamId(teamId);
   const { primaryLanguage, secondaryLanguage } = settings;
-  
+
   const homeView = createHome(apiKey, primaryLanguage, secondaryLanguage);
 
   try {
