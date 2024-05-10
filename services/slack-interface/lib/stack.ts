@@ -6,7 +6,7 @@ import {
   DynamoDBConstruct,
   EventBridge,
 } from "@slackbot/cdk-constructs";
-import { buildResourceName, getStage } from "@slackbot/helpers";
+import { buildResourceName, eventBusName, getStage } from "@slackbot/helpers";
 import {
   SlackAuthCallback,
   SlackInstall,
@@ -24,7 +24,7 @@ export class SlackInterfaceStack extends Stack {
     });
 
     const eventBridge = new EventBridge(this, "event-bridge", {
-      eventBusName: buildResourceName("traduire-global-event-bus"),
+      eventBusName,
     });
 
     const workspaceTable = new DynamoDBConstruct(this, "workspace-table", {
