@@ -8,13 +8,15 @@ import {
   getEnvVariable,
   getRegion,
 } from "@slackbot/helpers";
+import { Stack } from "aws-cdk-lib";
+import { LambdaIntegration, Resource } from "aws-cdk-lib/aws-apigateway";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
-import { Stack } from "aws-cdk-lib";
 
 interface SlackAuthCallbackProps {
   workspaceTable: Table;
+  slackEndPoint: Resource;
 }
 
 export class SlackAuthCallback extends Construct {
@@ -23,7 +25,7 @@ export class SlackAuthCallback extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { workspaceTable }: SlackAuthCallbackProps
+    { workspaceTable, slackEndPoint }: SlackAuthCallbackProps
   ) {
     super(scope, id);
 
@@ -51,5 +53,10 @@ export class SlackAuthCallback extends Construct {
     });
 
     this.function.addToRolePolicy(ssmReadPolicy);
+
+    // Auth callback URL
+    const oauthCallbackEndPoint = slackEndPoint.addResource("auth");
+    const oauthCallbackIntegration = new LambdaIntegration(this.function);
+    oauthCallbackEndPoint.addMethod("GET", oauthCallbackIntegration);
   }
 }

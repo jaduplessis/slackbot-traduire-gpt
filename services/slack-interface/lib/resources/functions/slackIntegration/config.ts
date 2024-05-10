@@ -6,6 +6,7 @@ import {
   getCdkHandlerPath,
   getEnvVariable,
 } from "@slackbot/helpers";
+import { LambdaIntegration, Resource } from "aws-cdk-lib/aws-apigateway";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { EventBus } from "aws-cdk-lib/aws-events";
 import { Construct } from "constructs";
@@ -13,6 +14,7 @@ import { Construct } from "constructs";
 interface slackIntegrationProps {
   eventBus: EventBus;
   workspaceTable: Table;
+  slackEndPoint: Resource;
 }
 
 export class SlackIntegration extends Construct {
@@ -21,7 +23,7 @@ export class SlackIntegration extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { eventBus, workspaceTable }: slackIntegrationProps
+    { eventBus, workspaceTable, slackEndPoint }: slackIntegrationProps
   ) {
     super(scope, id);
 
@@ -41,5 +43,9 @@ export class SlackIntegration extends Construct {
 
     eventBus.grantPutEventsTo(this.function);
     workspaceTable.grantReadData(this.function);
+
+    const eventsIntegrationEndPoint = slackEndPoint.addResource("events");
+    const eventsIntegration = new LambdaIntegration(this.function);
+    eventsIntegrationEndPoint.addMethod("POST", eventsIntegration);
   }
 }

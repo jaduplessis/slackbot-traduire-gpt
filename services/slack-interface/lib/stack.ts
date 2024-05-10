@@ -19,41 +19,31 @@ export class SlackInterfaceStack extends Stack {
 
     const stage = getStage();
 
+    const apiGateway = new ApiGateway(this, "api-gateway", {
+      stage,
+    });
+
     const eventBridge = new EventBridge(this, "event-bridge", {
       eventBusName: buildResourceName("traduire-global-event-bus"),
     });
 
-    const workspaceTable = new DynamoDBConstruct(
-      this,
-      "workspace-table",
-      {
-        tableName: buildResourceName("workspace-table"),
-      }
-    );
+    const workspaceTable = new DynamoDBConstruct(this, "workspace-table", {
+      tableName: buildResourceName("workspace-table"),
+    });
 
-    const slackIntegration = new SlackIntegration(
-      this,
-      "traduire-slack-integration",
-      {
-        eventBus: eventBridge.eventBus,
-        workspaceTable: workspaceTable.table,
-      }
-    );
+    new SlackIntegration(this, "traduire-slack-integration", {
+      eventBus: eventBridge.eventBus,
+      workspaceTable: workspaceTable.table,
+      slackEndPoint: apiGateway.slackEndPoint,
+    });
 
-    const slackInstall = new SlackInstall(this, "slack-install");
-    const slackAuthCallback = new SlackAuthCallback(
-      this,
-      "slack-auth-callback",
-      {
-        workspaceTable: workspaceTable.table,
-      }
-    );
+    new SlackInstall(this, "slack-install", {
+      slackEndPoint: apiGateway.slackEndPoint,
+    });
 
-    new ApiGateway(this, "api-gateway", {
-      stage,
-      slackIntegration,
-      slackInstall,
-      slackAuthCallback,
+    new SlackAuthCallback(this, "slack-auth-callback", {
+      workspaceTable: workspaceTable.table,
+      slackEndPoint: apiGateway.slackEndPoint,
     });
   }
 }

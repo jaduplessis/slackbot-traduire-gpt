@@ -1,12 +1,19 @@
 import { buildResourceName } from "@slackbot/helpers";
-import { ApiKeySourceType, RestApi } from "aws-cdk-lib/aws-apigateway";
+import {
+  ApiKeySourceType,
+  Resource,
+  RestApi,
+} from "aws-cdk-lib/aws-apigateway";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
-import { createIntegrations } from "./integrations";
-import { ApiGatewayProps } from "./types";
+
+export interface ApiGatewayProps {
+  stage: string;
+}
 
 export class ApiGateway extends Construct {
   public restApi: RestApi;
+  public slackEndPoint: Resource;
 
   constructor(scope: Construct, id: string, props: ApiGatewayProps) {
     super(scope, id);
@@ -25,7 +32,7 @@ export class ApiGateway extends Construct {
       apiKeySourceType: ApiKeySourceType.HEADER,
     });
 
-    createIntegrations({ ...props, api: this.restApi });
+    this.slackEndPoint = this.restApi.root.addResource("slack");
 
     const parameterName = buildResourceName("system/api-gateway-url");
 
