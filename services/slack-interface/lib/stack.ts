@@ -31,7 +31,7 @@ export class SlackInterfaceStack extends Stack {
       tableName: buildResourceName("workspace-table"),
     });
 
-    new SlackIntegration(this, "traduire-slack-integration", {
+    new SlackIntegration(this, "quipper-slack-integration", {
       eventBus: eventBridge.eventBus,
       workspaceTable: workspaceTable.table,
       slackEndPoint: apiGateway.slackEndPoint,

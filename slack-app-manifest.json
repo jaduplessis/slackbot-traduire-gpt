@@ -1,9 +1,9 @@
 {
   "display_information": {
-    "name": "traduire-gpt",
-    "description": "Translates any language to any language keeping both tone and clarity",
+    "name": "Quipper",
+    "description": "Transforms quotes into witty images for your 'Overheard At' channel",
     "background_color": "#278de6",
-    "long_description": "🌍 Welcome to the traduire-gpt app – where language barriers become a thing of the past, and communication becomes a global breeze! 🚀\r\n\r\nSay bonjour, hola, ciao, or konnichiwa to seamless translations right in your Slack channels! With traduire-gpt, adding a linguistic twist to your conversations is as easy as adding a sprinkle of emoji. 💬✨\r\n\r\n🔑 Unlock the power of global communication with your very own API Key! Simply plug it in, and voilà – you're ready to break down language barriers like a pro.\r\n\r\n🎉 How to Use:\r\n1. Add your OpenAI api key to the app's home page \r 2. Type `/invite` `@traduire-gpt-dev` in the channel you want translations in. From there its got you covered\r\n\r\nSit back, relax, and watch as your messages transcend linguistic borders with ease!\r\n\r\n🌈 Language Preferences:\r\nBut wait, there's more! Customise your translation experience by selecting your preferred primary and secondary languages. Whether you're all about English, French, Portuguese, or any other tongue, we've got you covered.\r\n\r\nSo, why settle for monolingual conversations when you can embrace the vibrant tapestry of global language? Spice up your Slack experience with traduire-gpt today – because communication should know no bounds! 🌐💬"
+    "long_description": "😄 Welcome to Quipper – the witty image generator that brings laughter to your 'Overheard At' channel! 🖼️\r\n\r\nTired of dull quotes fading into obscurity? With Quipper, those memorable quips become hilarious images that brighten up your workspace! Share your favorite quotes in the designated channel, and let Quipper work its magic, turning them into witty visuals that'll have your team chuckling in no time. 😂📷\r\n\r\n🔧 How to Use:\r\n1. Join the 'Overheard At' channel to start collecting quotes\r\n2. Mention `@Quipper` followed by the quote you want to transform\r\n3. Sit back and watch as Quipper generates a witty image instantly!\r\n\r\nWith Quipper, every snippet of conversation becomes a chance for amusement. Why settle for plain text when you can add a touch of humor to your workspace? Start creating witty images with Quipper today! 🌟😄"
   },
   "features": {
     "app_home": {
@@ -12,7 +12,7 @@
       "messages_tab_read_only_enabled": false
     },
     "bot_user": {
-      "display_name": "traduire-gpt",
+      "display_name": "quipper",
       "always_online": false
     }
   },

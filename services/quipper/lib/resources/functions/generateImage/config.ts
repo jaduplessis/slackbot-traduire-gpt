@@ -1,6 +1,5 @@
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 
-import { SlackCustomResource } from "@slackbot/cdk-constructs";
 import {
   buildParameterArnSsm,
   buildResourceName,
@@ -8,25 +7,28 @@ import {
   getEnvVariable,
   getRegion,
 } from "@slackbot/helpers";
-import { Stack } from "aws-cdk-lib";
+import { Duration, Stack } from "aws-cdk-lib";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { IEventBus, Rule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
+import { SlackCustomResource } from "@slackbot/cdk-constructs";
 
-interface appHomeProps {
+interface generateImageProps {
   eventBus: IEventBus;
-  traduireTable: Table;
+  resultsBucket: Bucket;
+  quipperTable: Table;
 }
 
-export class AppHome extends Construct {
+export class GenerateImage extends Construct {
   public function: NodejsFunction;
 
   constructor(
     scope: Construct,
     id: string,
-    { eventBus, traduireTable }: appHomeProps
+    { eventBus, resultsBucket, quipperTable }: generateImageProps
   ) {
     super(scope, id);
 
@@ -34,36 +36,43 @@ export class AppHome extends Construct {
     const accountId = Stack.of(this).account;
 
     const SLACK_SIGNING_SECRET = getEnvVariable("SLACK_SIGNING_SECRET");
+    // const SLACK_CHANNEL_ID = getEnvVariable("SLACK_CHANNEL_ID");
 
     this.function = new SlackCustomResource(
       this,
-      buildResourceName("app-home-opened"),
+      buildResourceName("generate-image"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
+        timeout: Duration.minutes(3),
         environment: {
           SLACK_SIGNING_SECRET,
+          RESULTS_BUCKET: resultsBucket.bucketName,
         },
       }
     );
 
-    traduireTable.grantReadWriteData(this.function);
+    // Grant putObject to the results bucket
+    resultsBucket.grantPut(this.function);
+    quipperTable.grantReadWriteData(this.function);
 
-    new Rule(this, buildResourceName("on-app-home-opened-event"), {
+    new Rule(this, buildResourceName("on-image-generated-event"), {
       eventBus,
       eventPattern: {
         source: ["application.slackIntegration"],
-        detailType: ["app.home.opened"],
+        detailType: ["generate.image"],
       },
       targets: [new LambdaFunction(this.function)],
     });
 
-    const accessPatternApiKey = buildResourceName("api-keys/*");
+    const apiAccessPattern = buildResourceName("api-keys/*");
+
     const ssmReadPolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
       resources: [
-        buildParameterArnSsm(`${accessPatternApiKey}`, region, accountId),
+        buildParameterArnSsm(`${apiAccessPattern}`, region, accountId),
       ],
     });
+
     this.function.addToRolePolicy(ssmReadPolicy);
   }
 }

@@ -64,23 +64,8 @@ export const handler: APIGatewayProxyHandler = async (
     );
   });
 
-  app.action("submit_language_preference", async ({ ack, body, context }) => {
-    await ack();
 
-    await eventBridge.putEvent(
-      "application.slackIntegration",
-      {
-        accessToken,
-        teamId,
-        token: context.botToken,
-        user_id: body.user.id,
-        body,
-      },
-      "submit.language.preference"
-    );
-  });
-
-  app.message(async ({ message }) => {
+  app.message(/["`'“”]/, async ({ message }) => {
     await eventBridge.putEvent(
       "application.slackIntegration",
       {
@@ -88,7 +73,7 @@ export const handler: APIGatewayProxyHandler = async (
         teamId,
         message,
       },
-      "translate.message"
+      "generate.image"
     );
   });
 

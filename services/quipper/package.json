@@ -1,5 +1,5 @@
 {
-  "name": "@slackbot/traduire-gpt",
+  "name": "@slackbot/quipper",
   "version": "0.0.1",
   "bin": {
     "backend": "bin/backend.ts"
@@ -20,7 +20,7 @@
     "dotenv": "^16.3.1",
     "dynamodb-toolbox": "^0.8.5",
     "openai": "^4.0.0",
-    "traduire-gpt": "^0.0.10"
+    "quipper": "latest"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.124",

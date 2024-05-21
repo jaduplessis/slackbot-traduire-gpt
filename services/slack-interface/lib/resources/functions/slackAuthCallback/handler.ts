@@ -80,7 +80,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       <body>
         <div class="container">
           <h1>Installation Successful!</h1>
-          <p>Thank you for installing our Traduire-GPT. We're excited to have you on board!</p>
+          <p>Thank you for installing our quipper. We're excited to have you on board!</p>
         </div>
       </body>
     </html>

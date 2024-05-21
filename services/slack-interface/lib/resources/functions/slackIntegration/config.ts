@@ -31,7 +31,7 @@ export class SlackIntegration extends Construct {
 
     this.function = new SlackCustomResource(
       this,
-      buildResourceName("traduire-slack-integration"),
+      buildResourceName("quipper-slack-integration"),
       {
         lambdaEntry: getCdkHandlerPath(__dirname),
         environment: {

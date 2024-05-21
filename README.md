@@ -50,7 +50,7 @@ Once deployed and configured, the application will look something like this:
 ![Home Page](docs/HomePage.png)
 
 You can submit or remove an OpenAI API key or update the language preference in the app home.
-You can add the app to a channel by running the command `/invite @traduire-gpt` in the channel.
+You can add the app to a channel by running the command `/invite @quipper` in the channel.
 The app will automatically translate messages sent in channels based on the language preference set by the user.
 The language preferences will translate any language to your primary language. If the orginal message is in your primary language, it will be translated to the secondary language.
 

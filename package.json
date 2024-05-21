@@ -1,5 +1,5 @@
 {
-  "name": "@slackbot-traduire-gpt/root",
+  "name": "@slackbot-quipper/root",
   "version": "1.0.0",
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",

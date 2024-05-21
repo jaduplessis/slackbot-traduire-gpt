@@ -1,6 +1,6 @@
 import { Entity, EntityItem } from "dynamodb-toolbox";
 
-import { TraduireTable } from "./Table";
+import { quipperTable } from "./Table";
 
 export const SettingsEntity = new Entity({
   name: "SettingsItem",
@@ -15,7 +15,7 @@ export const SettingsEntity = new Entity({
     primaryLanguage: { type: "string", default: "English", required: true },
     secondaryLanguage: { type: "string", default: "French", required: true },
   },
-  table: TraduireTable,
+  table: quipperTable,
 } as const);
 
 export type DDBSettings = EntityItem<typeof SettingsEntity>;

@@ -46,7 +46,7 @@
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "vitest.commandLine": "pnpm vitest",
-    "vitest.disabledWorkspaceFolders": ["Slackbot-TraduireGPT root"],
+    "vitest.disabledWorkspaceFolders": ["Slackbot-quipperGPT root"],
     "cSpell.words": ["esbuild", "metafile", "swarmion"]
   },
   "extensions": {
@@ -65,15 +65,15 @@
   "folders": [
     {
       "path": ".",
-      "name": "slackbot-traduire-gpt [root]"
+      "name": "slackbot-quipper [root]"
     },
     {
       "path": "services/slack-interface",
       "name": "slack-interface [service]"
     },
     {
-      "path": "services/traduire-gpt",
-      "name": "traduire-gpt [service]"
+      "path": "services/quipper",
+      "name": "quipper [service]"
     },
     {
       "path": "packages/cdk-constructs",

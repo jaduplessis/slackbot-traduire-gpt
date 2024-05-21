@@ -9,4 +9,4 @@ const app = new App();
 
 const stage = getStage();
 
-new SlackInterfaceStack(app, `${stage}-traduire-slack-interface`);
+new SlackInterfaceStack(app, `${stage}-quipper-slack-interface`);

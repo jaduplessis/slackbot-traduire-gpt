@@ -21,8 +21,7 @@
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "dynamodb-toolbox": "^0.8.5",
-    "openai": "^4.0.0",
-    "traduire-gpt": "^0.0.10"
+    "openai": "^4.0.0"
   },
   "devDependencies": {
     "@slack/types": "^2.11.0",

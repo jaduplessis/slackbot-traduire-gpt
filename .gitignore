@@ -13,11 +13,11 @@ node_modules
 cdk.out
 cdk.out/** */
 cdk.context.json
-services/traduire-gpt/.DS_Store
-services/traduire-gpt/cdk.out/dev-traduire-gpt.assets.json
-services/traduire-gpt/cdk.out/dev-traduire-gpt.template.json
-services/traduire-gpt/cdk.out/manifest.json
-services/traduire-gpt/cdk.out/tree.json
+services/quipper/.DS_Store
+services/quipper/cdk.out/dev-quipper.assets.json
+services/quipper/cdk.out/dev-quipper.template.json
+services/quipper/cdk.out/manifest.json
+services/quipper/cdk.out/tree.json
 
 # .env.* except .env.example
 .env*

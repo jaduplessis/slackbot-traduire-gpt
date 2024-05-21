@@ -7,8 +7,8 @@ const documentClient = new DynamoDB({
   region: getRegion(),
 });
 
-export const TraduireTable = new Table({
-  name: buildResourceName("traduire-table"),
+export const quipperTable = new Table({
+  name: buildResourceName("quipper-table"),
   partitionKey: "PK",
   sortKey: "SK",
   indexes: {
