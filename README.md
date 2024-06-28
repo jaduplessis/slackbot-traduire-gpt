@@ -4,6 +4,8 @@ This project demonstrates how to build a custom Slack application using serverle
 
 The interaction between deployed infrastructure and Slack is handled using the Javascript Bolt framework, which simplifies the process of building Slack apps by providing a simple and intuitive API for handling events and actions.
 
+If you're interested in finding out more about how this works, read over this blog post -> [Leveraging AWS Lambda and EventBridge for a Multilingual Slack Bot](https://medium.com/@andredp_33483/leveraging-aws-lambda-and-eventbridge-for-a-multilingual-slack-bot-1b5fb9cf1a0e)
+
 This application can be downloaded to your Slack workspace using this link:
 
 ## Overview
